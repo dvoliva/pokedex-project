@@ -38,5 +38,5 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"[{i}/50] {normal_name} - {action} correctamente."))
 
             except Exception as e:
-                    self.stdout.write(self.style.ERROR(f"drror al procesar el pokémon {i}: {str(e)}"))
+                    self.stdout.write(self.style.ERROR(f"error al procesar el pokémon {i}: {str(e)}"))
         self.stdout.write(self.style.SUCCESS("descarga completada"))

@@ -1,13 +1,38 @@
+version: '3.8'
 
 services:
+  # SERVICIO 1: La Base de Datos
+  db:
+    image: postgres:15-alpine  # Usamos una versión ligera (Alpine) de Postgres
+    restart: always            # Si falla, se reinicia sola
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistencia: Los datos se guardan en un volumen de Docker, no en el contenedor
+    environment:
+      - POSTGRES_DB=pokedex_db
+      - POSTGRES_USER=oak_user
+      - POSTGRES_PASSWORD=password_secreta_dev
+    ports:
+      - "5432:5432" # Opcional: Expone el puerto por si quieres conectar un gestor visual como DBeaver
+
+  # SERVICIO 2: Tu Aplicación Web
   web:
     build: .
-    
+    # Comando para iniciar el servidor
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app  # Código en vivo: lo que editas en tu PC se ve en el contenedor
     ports:
       - "8000:8000"
-    
-    #  volumen
-    volumes:
-      - ./db.sqlite3:/app/db.sqlite3
-    
-    command: python src/manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env    # Inyectamos las variables secretas
+    environment:
+      # Esta es la magia. Le decimos a Django dónde está la DB.
+      # Sintaxis: postgres://USUARIO:PASSWORD@HOSTNAME:PUERTO/NOMBRE_DB
+      # Nota que el hostname es 'db', que es el nombre del servicio de arriba.
+      - DATABASE_URL=postgres://oak_user:password_secreta_dev@db:5432/pokedex_db
+    depends_on:
+      - db      # Docker no iniciará 'web' hasta que 'db' haya arrancado
+
+# Declaración del volumen global para persistencia
+volumes:
+  postgres_data:
