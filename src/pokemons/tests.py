@@ -1,10 +1,6 @@
 from django.test import TestCase, Client
-from django.urls import reverse
 from .models import Pokemon
 
-from django.test import TestCase, Client
-from django.urls import reverse
-from .models import Pokemon
 
 class PokemonModelTest(TestCase):
     """
@@ -15,7 +11,7 @@ class PokemonModelTest(TestCase):
         self.pokemon = Pokemon.objects.create(
             id=1,
             name="Bulbasaur",
-            name_inverted="ruasabluB", # Simulamos que el ETL ya hizo su trabajo
+            name_inverted="ruasabluB",  # Simulamos que el ETL ya hizo su trabajo
             height=7,
             weight=69,
             types=["grass", "poison"]
@@ -26,6 +22,7 @@ class PokemonModelTest(TestCase):
         p = Pokemon.objects.get(id=1)
         self.assertEqual(p.name, "Bulbasaur")
         self.assertEqual(p.types[0], "grass")
+
 
 class PokemonViewTest(TestCase):
     """
@@ -39,14 +36,14 @@ class PokemonViewTest(TestCase):
         # Pokemon 1: Ligero y Tipo Fuego
         Pokemon.objects.create(
             id=4, name="Charmander", name_inverted="rednamrahC",
-            height=6, weight=85, # Peso > 80 (No pasa filtro heavy)
+            height=6, weight=85,  # Peso > 80 (No pasa filtro heavy)
             types=["fire"]
         )
 
         # Pokemon 2: Medio y Tipo Planta (Candidato perfecto)
         Pokemon.objects.create(
             id=1, name="Bulbasaur", name_inverted="ruasabluB",
-            height=7, weight=69, # Peso entre 30 y 80
+            height=7, weight=69,  # Peso entre 30 y 80
             types=["grass", "poison"]
         )
 

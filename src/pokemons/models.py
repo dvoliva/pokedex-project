@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Pokemon(models.Model):
     """
     modelo para representar los datos de un pokémon.
