@@ -15,4 +15,7 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--chdir", "src", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD python src/manage.py collectstatic --noinput && \
+    python src/manage.py migrate && \
+    python src/manage.py load_pokemons && \
+    gunicorn --chdir src --bind 0.0.0.0:8000 config.wsgi:application
