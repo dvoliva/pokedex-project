@@ -2,6 +2,7 @@ import requests
 from django.core.management.base import BaseCommand
 from pokemons.models import Pokemon
 
+
 class Command(BaseCommand):
     help = 'Descarga los primeros 50 pokémons desde la API y los guarda en la base de datos'
 
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                 type_list = [t['type']['name'] for t in data['types']]
 
                 obj, created = Pokemon.objects.update_or_create(
-                    id = data['id'],
+                    id=data['id'],
                     defaults={
                         'name': normal_name,
                         'name_inverted': inverted_name,
@@ -38,5 +39,5 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"[{i}/50] {normal_name} - {action} correctamente."))
 
             except Exception as e:
-                    self.stdout.write(self.style.ERROR(f"error al procesar el pokémon {i}: {str(e)}"))
+                self.stdout.write(self.style.ERROR(f"error al procesar el pokémon {i}: {str(e)}"))
         self.stdout.write(self.style.SUCCESS("descarga completada"))
