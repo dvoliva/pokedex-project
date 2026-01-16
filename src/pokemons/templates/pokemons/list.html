@@ -1,30 +1,47 @@
+<!--
+    list.html - template principal del dashboard de pokemon.
+
+    muestra una tabla con los 50 pokemon y botones de filtro
+    que corresponden a los requisitos del profesor oak.
+
+    variables de contexto:
+        - pokemons: queryset de pokemon (filtrado o completo)
+        - active_filter: filtro activo para resaltar el boton correspondiente
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pokedex HP 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex - Laboratorio del Profesor Oak</title>
+    <!-- bootstrap 5 para estilos responsive -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
 <div class="container mt-5">
-    <h1 class="mb-4">🔬 Laboratorio del Profesor Oak</h1>
+    <h1 class="mb-4">Laboratorio del Profesor Oak</h1>
 
-    <div class="btn-group mb-4" role="group">
+    <!-- botones de filtro: cada uno envia un query param diferente -->
+    <div class="btn-group mb-4" role="group" aria-label="filtros de pokemon">
         <a href="/" class="btn btn-outline-primary {% if not active_filter %}active{% endif %}">
             Todos
         </a>
+        <!-- filtro 1: peso entre 30 y 80 -->
         <a href="/?filter=heavy" class="btn btn-outline-primary {% if active_filter == 'heavy' %}active{% endif %}">
             Peso 30-80
         </a>
+        <!-- filtro 2: tipo grass -->
         <a href="/?filter=grass" class="btn btn-outline-success {% if active_filter == 'grass' %}active{% endif %}">
             Tipo Planta
         </a>
+        <!-- filtro 3: tipo flying con altura > 10 -->
         <a href="/?filter=flying" class="btn btn-outline-info {% if active_filter == 'flying' %}active{% endif %}">
             Voladores Altos
         </a>
     </div>
 
+    <!-- tabla principal de pokemon -->
     <div class="card shadow">
         <div class="card-body">
             <table class="table table-hover">
@@ -43,10 +60,14 @@
                     {% for p in pokemons %}
                     <tr>
                         <td>{{ p.id }}</td>
+                        <!-- sprite oficial desde el repositorio de pokeapi -->
                         <td>
-                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ p.id }}.png" width="50">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ p.id }}.png" 
+                                 alt="sprite de {{ p.name }}"
+                                 width="50">
                         </td>
                         <td class="fw-bold text-capitalize">{{ p.name }}</td>
+                        <!-- nombre invertido: requisito 4 del enunciado -->
                         <td class="text-muted">{{ p.name_inverted }}</td>
                         <td>
                             {% for type in p.types %}
@@ -57,8 +78,9 @@
                         <td>{{ p.weight }}</td>
                     </tr>
                     {% empty %}
+                    <!-- mensaje cuando el filtro no retorna resultados -->
                     <tr>
-                        <td colspan="7" class="text-center">No se encontraron Pokémon con este filtro.</td>
+                        <td colspan="7" class="text-center">No se encontraron Pokemon con este filtro.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -68,4 +90,5 @@
 </div>
 
 </body>
+</html>
 </html>
