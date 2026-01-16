@@ -4,14 +4,28 @@ Dashboard web para analizar datos de Pokemon, desarrollado como prueba tecnica p
 
 ## Tabla de Contenidos
 
-- [Contexto](#contexto)
-- [Que hace el proyecto](#que-hace-el-proyecto)
-- [Checklist de requisitos](#checklist-de-requisitos)
-- [Extras implementados](#extras-implementados)
-- [Tecnologias utilizadas](#tecnologias-utilizadas)
-- [Como ejecutar el proyecto](#como-ejecutar-el-proyecto)
-- [Ejecutar tests](#ejecutar-tests)
-- [Estructura del proyecto](#estructura-del-proyecto)
+- [Pokedex del Profesor Oak](#pokedex-del-profesor-oak)
+  - [Tabla de Contenidos](#tabla-de-contenidos)
+  - [Contexto](#contexto)
+  - [Que hace el proyecto](#que-hace-el-proyecto)
+  - [Checklist de requisitos](#checklist-de-requisitos)
+    - [Vista principal con columnas requeridas](#vista-principal-con-columnas-requeridas)
+    - [Filtros del profesor Oak](#filtros-del-profesor-oak)
+    - [Transformacion de datos](#transformacion-de-datos)
+    - [Especificaciones tecnicas](#especificaciones-tecnicas)
+  - [Extras implementados](#extras-implementados)
+  - [Tecnologias utilizadas](#tecnologias-utilizadas)
+  - [Como ejecutar el proyecto](#como-ejecutar-el-proyecto)
+    - [Requisitos previos](#requisitos-previos)
+    - [Pasos](#pasos)
+    - [Que sucede al iniciar](#que-sucede-al-iniciar)
+  - [Ejecutar tests](#ejecutar-tests)
+    - [Con Docker (recomendado)](#con-docker-recomendado)
+    - [Sin Docker (desarrollo local)](#sin-docker-desarrollo-local)
+    - [Resultado esperado](#resultado-esperado)
+  - [Estructura del proyecto](#estructura-del-proyecto)
+  - [Notas adicionales](#notas-adicionales)
+  - [Autor](#autor)
 
 ---
 
