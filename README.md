@@ -133,7 +133,7 @@ Funcionalidades adicionales que aportan valor al proyecto:
 1. **Clonar el repositorio**
 
 ```bash
-git clone https://github.com/tu-usuario/pokedex-project.git
+git clone https://github.com/dvoliva/pokedex-project.git
 cd pokedex-project
 ```
 
@@ -225,7 +225,7 @@ pokedex-project/
 ## Notas adicionales
 
 - Los datos de peso y altura estan en las unidades originales de la PokeAPI (hectogramos y decimetros)
-- El proyecto esta desplegado en: [url de render si aplica]
+- El proyecto esta desplegado en: https://pokedex-project-nzff.onrender.com/
 - Para crear un superusuario del admin: `docker-compose exec web python src/manage.py createsuperuser`
 
 ---
