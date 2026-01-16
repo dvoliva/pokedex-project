@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432" # Opcional: Expone el puerto por si quieres conectar un gestor visual como DBeaver
 
-  # SERVICIO 2: Tu Aplicación Web
+  # SERVICIO 2: La Aplicación Django
   web:
     build: .
     # Comando para iniciar el servidor
