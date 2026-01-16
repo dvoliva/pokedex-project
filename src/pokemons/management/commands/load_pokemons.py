@@ -1,43 +1,97 @@
+"""
+load_pokemons.py - comando de django para cargar datos desde pokeapi.
+
+este comando implementa un pipeline etl (extract, transform, load)
+que descarga los primeros 50 pokemon desde la api publica y los
+persiste en la base de datos.
+
+uso:
+    python manage.py load_pokemons
+"""
+
 import requests
 from django.core.management.base import BaseCommand
 from pokemons.models import Pokemon
 
 
 class Command(BaseCommand):
-    help = 'Descarga los primeros 50 pokémons desde la API y los guarda en la base de datos'
+    """
+    comando de django para poblar la base de datos con pokemon.
+
+    realiza las siguientes operaciones:
+    1. extract: descarga datos de cada pokemon desde pokeapi
+    2. transform: capitaliza nombre, invierte string, extrae tipos
+    3. load: guarda o actualiza en la base de datos (upsert)
+    """
+
+    help = 'descarga los primeros 50 pokemon desde pokeapi y los guarda en la base de datos'
+
+    # url base de la api publica de pokemon
+    BASE_URL = "https://pokeapi.co/api/v2/pokemon/"
+
+    # cantidad de pokemon a descargar segun el enunciado
+    POKEMON_LIMIT = 50
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("descarga iniciada")
-        base_url = "https://pokeapi.co/api/v2/pokemon/"
+        """
+        punto de entrada del comando.
 
-        limit = 50
-        for i in range(1, limit + 1):
-            try:
-                response = requests.get(f"{base_url}{i}/")
-                if response.status_code != 200:
-                    self.stdout.write(f"error {i}")
-                    continue
-                data = response.json()
+        itera sobre los ids del 1 al 50, descarga cada pokemon,
+        transforma los datos y los guarda en la base de datos.
+        """
+        self.stdout.write("iniciando descarga de pokemon desde pokeapi...")
 
-                normal_name = data['name'].capitalize()  # "pikachu" -> "Pikachu"
-                inverted_name = normal_name[::-1]  # "Pikachu" -> "uhcakiP"
+        for pokemon_id in range(1, self.POKEMON_LIMIT + 1):
+            self._process_pokemon(pokemon_id)
 
-                type_list = [t['type']['name'] for t in data['types']]
+        self.stdout.write(self.style.SUCCESS("descarga completada exitosamente"))
 
-                obj, created = Pokemon.objects.update_or_create(
-                    id=data['id'],
-                    defaults={
-                        'name': normal_name,
-                        'name_inverted': inverted_name,
-                        'types': type_list,
-                        'height': data['height'],
-                        'weight': data['weight']
-                    }
+    def _process_pokemon(self, pokemon_id: int) -> None:
+        """
+        procesa un pokemon individual: descarga, transforma y guarda.
+
+        args:
+            pokemon_id: id del pokemon en la pokedex (1-50).
+        """
+        try:
+            # extract: obtener datos de la api
+            response = requests.get(f"{self.BASE_URL}{pokemon_id}/")
+
+            if response.status_code != 200:
+                self.stdout.write(
+                    self.style.WARNING(f"[{pokemon_id}/50] error al descargar, status: {response.status_code}")
                 )
+                return
 
-                action = "Creado" if created else "Actualizado"
-                self.stdout.write(self.style.SUCCESS(f"[{i}/50] {normal_name} - {action} correctamente."))
+            data = response.json()
 
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"error al procesar el pokémon {i}: {str(e)}"))
-        self.stdout.write(self.style.SUCCESS("descarga completada"))
+            # transform: procesar datos para el modelo
+            name = data['name'].capitalize()
+            name_inverted = name[::-1]  # requisito 4: invertir nombre
+            types = [t['type']['name'] for t in data['types']]
+
+            # load: guardar o actualizar en la base de datos (upsert)
+            obj, created = Pokemon.objects.update_or_create(
+                id=data['id'],
+                defaults={
+                    'name': name,
+                    'name_inverted': name_inverted,
+                    'types': types,
+                    'height': data['height'],
+                    'weight': data['weight']
+                }
+            )
+
+            action = "creado" if created else "actualizado"
+            self.stdout.write(
+                self.style.SUCCESS(f"[{pokemon_id}/50] {name} - {action} correctamente")
+            )
+
+        except requests.RequestException as e:
+            self.stdout.write(
+                self.style.ERROR(f"[{pokemon_id}/50] error de conexion: {str(e)}")
+            )
+        except Exception as e:
+            self.stdout.write(
+                self.style.ERROR(f"[{pokemon_id}/50] error inesperado: {str(e)}")
+            )
