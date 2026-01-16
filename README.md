@@ -20,8 +20,6 @@ Dashboard web para analizar datos de Pokemon, desarrollado como prueba tecnica.
     - [Pasos](#pasos)
     - [Que sucede al iniciar](#que-sucede-al-iniciar)
   - [Ejecutar tests](#ejecutar-tests)
-    - [Con Docker (recomendado)](#con-docker-recomendado)
-    - [Sin Docker (desarrollo local)](#sin-docker-desarrollo-local)
     - [Resultado esperado](#resultado-esperado)
   - [Estructura del proyecto](#estructura-del-proyecto)
   - [Notas adicionales](#notas-adicionales)
@@ -102,7 +100,6 @@ Funcionalidades adicionales que aportan valor al proyecto:
 | **Panel de administracion** | Django Admin configurado para gestionar Pokemon manualmente |
 | **Imagenes de sprites** | La tabla muestra la imagen oficial de cada Pokemon |
 | **ETL idempotente** | El comando `load_pokemons` usa upsert, puede ejecutarse multiples veces sin duplicar datos |
-| **Compatibilidad SQLite** | El proyecto funciona con SQLite en desarrollo local sin Docker |
 
 ---
 
@@ -111,7 +108,7 @@ Funcionalidades adicionales que aportan valor al proyecto:
 | Categoria | Tecnologia |
 |-----------|------------|
 | Backend | Python 3.12, Django 6.0.1 |
-| Base de datos | PostgreSQL 15 (produccion), SQLite (desarrollo) |
+| Base de datos | PostgreSQL 15 |
 | Servidor WSGI | Gunicorn |
 | Archivos estaticos | WhiteNoise |
 | Contenedores | Docker, Docker Compose |
@@ -166,17 +163,8 @@ Abrir en el navegador: [http://localhost:8000](http://localhost:8000)
 
 ## Ejecutar tests
 
-### Con Docker (recomendado)
-
 ```bash
 docker-compose exec web python src/manage.py test pokemons
-```
-
-### Sin Docker (desarrollo local)
-
-```bash
-cd src
-python manage.py test pokemons
 ```
 
 ### Resultado esperado
@@ -226,7 +214,6 @@ pokedex-project/
 
 - Los datos de peso y altura estan en las unidades originales de la PokeAPI (hectogramos y decimetros)
 - El proyecto esta desplegado en: https://pokedex-project-nzff.onrender.com/
-- Para crear un superusuario del admin: `docker-compose exec web python src/manage.py createsuperuser`
 
 ---
 
