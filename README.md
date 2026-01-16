@@ -1,6 +1,6 @@
 # Pokedex del Profesor Oak
 
-Dashboard web para analizar datos de Pokemon, desarrollado como prueba tecnica para demostrar habilidades en Python, Django, Docker y CI/CD.
+Dashboard web para analizar datos de Pokemon, desarrollado como prueba tecnica.
 
 ## Tabla de Contenidos
 
@@ -231,5 +231,9 @@ pokedex-project/
 ---
 
 ## Autor
+
+Diego Venegas Oliva
+
+---
 
 Desarrollado como prueba tecnica - 2026
