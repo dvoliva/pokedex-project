@@ -39,3 +39,6 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Django static files (generados por collectstatic)
+staticfiles/
