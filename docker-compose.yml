@@ -1,0 +1,18 @@
+
+services:
+  web:
+    # Construye la imagen usando el Dockerfile de la carpeta actual
+    build: .
+    
+    # Mapeo de Puertos: "Puerto de mi PC : Puerto del Contenedor"
+    ports:
+      - "8000:8000"
+    
+    # VOLÚMENES (La clave de la persistencia)
+    # Conectamos el archivo db.sqlite3 de TU máquina con el del contenedor.
+    # Si borras el contenedor, el archivo en tu máquina sobrevive.
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    
+    # Comando opcional (sobrescribe el CMD del Dockerfile si quisiéramos)
+    command: python src/manage.py runserver 0.0.0.0:8000
