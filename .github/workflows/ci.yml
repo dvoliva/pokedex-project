@@ -1,0 +1,64 @@
+name: 🛡️ CI Pipeline - Pokedex
+
+# ¿Cuándo se activa el robot?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # SERVICIOS: Levantamos una DB Postgres temporal dentro de GitHub Actions
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: pokedex_db
+          POSTGRES_USER: oak_user
+          POSTGRES_PASSWORD: password_secreta_ci
+        ports:
+          - 5432:5432
+        # Healthcheck: Esperamos a que Postgres esté listo antes de seguir
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    # 1. Descargar el código del repo
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Instalar Python
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    # 3. Instalar dependencias
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4. Auditoría de Código (Linting)
+    # flake8 revisará errores de sintaxis y estilo.
+    # E501 ignora líneas largas (a veces necesario en Django settings)
+    - name: Lint with flake8
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    # 5. Ejecutar Tests
+    # Inyectamos las variables de entorno para que Django use la Postgres del servicio de arriba
+    - name: Run Tests
+      env:
+        SECRET_KEY: 'clave-temporal-para-ci-github'
+        DEBUG: 'True'
+        DATABASE_URL: postgres://oak_user:password_secreta_ci@localhost:5432/pokedex_db
+      run: |
+        python src/manage.py test src/pokemons
