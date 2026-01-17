@@ -126,8 +126,9 @@ Funcionalidades adicionales que aportan valor al proyecto:
 - Git
 
 ### Pasos
+1. **Iniciar Docker Desktop**
 
-1. **Clonar el repositorio**
+2. **Clonar el repositorio**
 
 ```bash
 git clone https://github.com/dvoliva/pokedex-project.git
