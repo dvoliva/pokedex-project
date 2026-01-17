@@ -36,9 +36,18 @@ class Command(BaseCommand):
         """
         punto de entrada del comando.
 
-        itera sobre los ids del 1 al 50, descarga cada pokemon,
-        transforma los datos y los guarda en la base de datos.
+        verifica si ya existen datos en la base de datos.
+        si existen, omite la descarga. si no, itera sobre los ids
+        del 1 al 50, descarga cada pokemon y los guarda.
         """
+        # verificar si ya hay datos en la base de datos
+        existing_count = Pokemon.objects.count()
+        if existing_count >= self.POKEMON_LIMIT:
+            self.stdout.write(
+                self.style.SUCCESS(f"base de datos ya contiene {existing_count} pokemon. omitiendo descarga.")
+            )
+            return
+
         self.stdout.write("iniciando descarga de pokemon desde pokeapi...")
 
         for pokemon_id in range(1, self.POKEMON_LIMIT + 1):
