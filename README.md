@@ -162,6 +162,7 @@ Abrir en el navegador: [http://localhost:8000](http://localhost:8000)
 ---
 
 ## Ejecutar tests
+En una terminal nueva:
 
 ```bash
 docker-compose exec web python src/manage.py test pokemons
