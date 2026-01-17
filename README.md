@@ -216,6 +216,7 @@ pokedex-project/
 
 - Los datos de peso y altura estan en las unidades originales de la PokeAPI (hectogramos y decimetros)
 - El proyecto esta desplegado en: https://pokedex-project-nzff.onrender.com/
+- **Nota:** Render (capa gratuita) puede demorar hasta 50 segundos en despertar la app si estuvo inactiva más de 15 minutos. Esto es normal en servicios free-tier.
 
 ---
 
